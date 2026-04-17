@@ -1,0 +1,125 @@
+diff --git a/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_he.dts b/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_he.dts
+index 4d63e2006bd..73d289c71c3 100644
+--- a/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_he.dts
++++ b/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_he.dts
+@@ -18,12 +18,16 @@
+ 		zephyr,flash = &mram_storage;
+ 		zephyr,code-partition = &slot0_partition;
+ 		zephyr,sram = &dtcm;
+-		zephyr,console = &uart2;
+-		zephyr,shell-uart = &uart2;
+-		zephyr,uart-mcumgr = &uart2;
++		zephyr,console = &uart4;
++		zephyr,shell-uart = &uart4;
++		zephyr,uart-mcumgr = &uart4;
+ 	};
+ 
+ 	aliases {
++		apsshemhu0r = &rtssapss_rtsshe_mhu0_r;
++		apsshemhu0s = &rtsshe_rtssapss_mhu0_s;
++		apsshemhu1r = &rtssapss_rtsshe_mhu1_r;
++		apsshemhu1s = &rtsshe_rtssapss_mhu1_s;
+ 		led0 = &aled0;
+ 		sw0 = &button0;
+ 		watchdog0 = &wdog0;
+@@ -33,8 +37,8 @@
+ 		compatible = "gpio-leds";
+ 
+ 		aled0: led_0 {
+-			gpios = <&gpio6 4 0>;
+-			label = "LED1_G";
++			gpios = <&gpio6 2 0>;
++			label = "LED1_R";
+ 		};
+ 	};
+ 
+@@ -91,6 +95,6 @@
+ 	status = "okay";
+ };
+ 
+-&uart2 {
++&uart4 {
+ 	status = "okay";
+ };
+diff --git a/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_hp.dts b/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_hp.dts
+index 92511c55958..3a9a9317884 100644
+--- a/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_hp.dts
++++ b/boards/alif/alif_e8_dk/alif_e8_dk_ae822fa0e5597xx0_rtss_hp.dts
+@@ -27,6 +27,10 @@
+ 		led0 = &aled0;
+ 		sw0 = &button0;
+ 		watchdog0 = &wdog0;
++		apssmhu1r = &rtssapss_rtsshp_mhu1_r;
++		apssmhu1s = &rtsshp_rtssapss_mhu1_s;
++		apssmhu0r = &rtssapss_rtsshp_mhu0_r;
++		apssmhu0s = &rtsshp_rtssapss_mhu0_s;
+ 		rtsshemhu0r = &rtsshp_rtsshe_mhu0_r;
+ 		rtsshemhu0s = &rtsshe_rtsshp_mhu0_s;
+ 		rtsshemhu1r = &rtsshp_rtsshe_mhu1_r;
+diff --git a/dts/arm/alif/ensemble/common/e1.dtsi b/dts/arm/alif/ensemble/common/e1.dtsi
+index b8c078dcde4..93ed52d1e98 100644
+--- a/dts/arm/alif/ensemble/common/e1.dtsi
++++ b/dts/arm/alif/ensemble/common/e1.dtsi
+@@ -162,6 +162,62 @@
+ 			interrupt-names = "tx";
+ 		};
+ 
++		rtssapss_rtsshe_mhu0_r:mhu@40000000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40000000 0x1000 >;
++			interrupts = < 33 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "rx";
++		};
++
++		rtsshe_rtssapss_mhu0_s:mhu@40010000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40010000 0x1000 >;
++			interrupts = < 34 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "tx";
++		};
++
++		rtssapss_rtsshe_mhu1_r:mhu@40020000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40020000 0x1000 >;
++			interrupts = < 35 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "rx";
++		};
++
++		rtsshe_rtssapss_mhu1_s:mhu@40030000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40030000 0x1000 >;
++			interrupts = < 36 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "tx";
++		};
++/*
++		rtssapss_rtsshp_mhu0_r:mhu@40000000 {
++			compatible = "arm,mhuv2";
++                        reg = < 0x40000000 0x1000 >;
++                        interrupts = < 33 ALIF_DEFAULT_IRQ_PRIORITY >;
++                        interrupt-names = "rx";
++                };
++
++		rtsshp_rtssapss_mhu0_s:mhu@40010000 {
++			compatible = "arm,mhuv2";
++                        reg = < 0x40010000 0x1000 >;
++                        interrupts = < 34 ALIF_DEFAULT_IRQ_PRIORITY >;
++                        interrupt-names = "tx";
++                };
++
++		rtssapss_rtsshp_mhu1_r:mhu@40020000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40020000 0x1000 >;
++			interrupts = < 35 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "rx";
++		};
++
++		rtsshp_rtssapss_mhu1_s:mhu@40030000 {
++			compatible = "arm,mhuv2";
++			reg = < 0x40030000 0x1000 >;
++			interrupts = < 36 ALIF_DEFAULT_IRQ_PRIORITY >;
++			interrupt-names = "tx";
++		};
++*/
+ 		rtsshp_rtsshe_mhu0_r: mhu@40080000 {
+ 			compatible = "arm,mhuv2";
+ 			reg = < 0x40080000 0x1000 >;
